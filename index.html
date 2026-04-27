@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pre-Flight Checklist</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --bg-header: #fff;
+      --bg-section: #f5f5f5;
+      --bg-card: #fff;
+      --text: #111;
+      --text-muted: #999;
+      --border: #e0e0e0;
+      --accent: #0055e5;
+      --accent-subtle: #e8efff;
+      --track: #ebebeb;
+      --danger: #c82200;
+      --skip-bg: #f0f0f0;
+      --skip-border: #bbb;
+      --skip-dot: #aaa;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0c0c0c;
+        --bg-header: #0c0c0c;
+        --bg-section: #161616;
+        --bg-card: #1a1a1a;
+        --text: #f0f0f0;
+        --text-muted: #666;
+        --border: #282828;
+        --accent: #4d8bff;
+        --accent-subtle: #0c1e3a;
+        --track: #202020;
+        --danger: #ff5c38;
+        --skip-bg: #111;
+        --skip-border: #333;
+        --skip-dot: #444;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, ui-sans-serif, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      max-width: 640px;
+      margin: 0 auto;
+      padding-bottom: 72px;
+    }
+
+    /* ── Sticky header ── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+      padding: 13px 16px 11px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 9px;
+    }
+
+    .app-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+    }
+
+    .counter {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-track {
+      height: 3px;
+      background: var(--track);
+      border-radius: 2px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.22s ease;
+    }
+
+    /* ── Sections ── */
+    .sections {
+      padding: 14px 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    details.section {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-section);
+      overflow: hidden;
+    }
+
+    details.section > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 14px;
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+      min-height: 44px;
+    }
+
+    details.section > summary::-webkit-details-marker { display: none; }
+
+    .summary-inner {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .chevron {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      color: var(--text-muted);
+      transition: transform 0.15s;
+    }
+
+    details[open] > summary .chevron {
+      transform: rotate(90deg);
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1px 8px;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+
+    .badge.done {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--accent-subtle);
+    }
+
+    /* ── Card grid ── */
+    .items {
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 10px;
+    }
+
+    @media (min-width: 420px) {
+      .items { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* ── Individual card ── */
+    .item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 16px 6px 13px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--bg-card);
+      cursor: pointer;
+      min-height: 96px;
+      text-align: center;
+      user-select: none;
+      transition: background 0.13s, border-color 0.13s, opacity 0.13s;
+      outline: none;
+    }
+
+    .item:focus-visible {
+      box-shadow: 0 0 0 3px var(--accent);
+    }
+
+    .item-emoji {
+      font-size: 2rem;
+      line-height: 1;
+      transition: opacity 0.13s, filter 0.13s;
+      pointer-events: none;
+    }
+
+    .item-label {
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.3;
+      color: var(--text);
+      transition: color 0.13s, text-decoration 0.13s;
+      pointer-events: none;
+    }
+
+    /* Corner indicator dot */
+    .item-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+      color: #fff;
+      opacity: 0;
+      transition: opacity 0.13s, background 0.13s;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    /* ── Checked state (1st click) ── */
+    .item[data-state="checked"] {
+      background: var(--accent-subtle);
+      border-color: var(--accent);
+    }
+
+    .item[data-state="checked"] .item-emoji {
+      opacity: 0.45;
+    }
+
+    .item[data-state="checked"] .item-label {
+      color: var(--text-muted);
+    }
+
+    .item[data-state="checked"] .item-dot {
+      opacity: 1;
+      background: var(--accent);
+    }
+
+    /* ── Skipped state (2nd click) ── */
+    .item[data-state="skipped"] {
+      background: var(--skip-bg);
+      border-color: var(--skip-border);
+      border-style: dashed;
+    }
+
+    .item[data-state="skipped"] .item-emoji {
+      opacity: 0.2;
+      filter: grayscale(1);
+    }
+
+    .item[data-state="skipped"] .item-label {
+      color: var(--text-muted);
+      text-decoration: line-through;
+      text-decoration-color: var(--skip-border);
+    }
+
+    .item[data-state="skipped"] .item-dot {
+      opacity: 1;
+      background: var(--skip-dot);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      display: flex;
+      justify-content: center;
+      padding: 28px 16px 0;
+    }
+
+    .reset-btn {
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--danger);
+      background: transparent;
+      border: 1px solid var(--danger);
+      border-radius: 8px;
+      padding: 0 20px;
+      height: 44px;
+      cursor: pointer;
+      opacity: 0.75;
+      transition: opacity 0.1s;
+    }
+
+    .reset-btn:hover  { opacity: 1; }
+    .reset-btn:active { opacity: 0.5; }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-row">
+    <span class="app-title">Pre-Flight Checklist</span>
+    <span class="counter" id="counter">0 of 50 checked</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress"></div>
+  </div>
+</header>
+
+<main class="sections" id="sections"></main>
+
+<div class="footer">
+  <button class="reset-btn" id="reset-btn">Reset checklist</button>
+</div>
+
+<script>
+const KEY = 'preflight-checklist-v1';
+
+const LIST = [
+  {
+    id: 'documents',
+    title: 'Travel Documents',
+    items: [
+      { id: 'passport',           emoji: '🛂', label: 'Passport' },
+      { id: 'visa',               emoji: '📋', label: 'Visa / Permit' },
+      { id: 'boarding_pass',      emoji: '🎫', label: 'Boarding Pass' },
+      { id: 'national_id',        emoji: '🪪', label: 'National ID' },
+      { id: 'travel_insurance',   emoji: '🏥', label: 'Travel Insurance' },
+      { id: 'hotel_confirm',      emoji: '🏨', label: 'Hotel Confirm' },
+      { id: 'emergency_contacts', emoji: '📞', label: 'Emergency Contacts' },
+    ],
+  },
+  {
+    id: 'money',
+    title: 'Money & Payment',
+    items: [
+      { id: 'primary_card',   emoji: '💳', label: 'Wallet' },
+      { id: 'local_currency', emoji: '💰', label: 'Cash' },
+    ],
+  },
+  {
+    id: 'electronics',
+    title: 'Electronics & Chargers',
+    items: [
+      { id: 'phone_charged',  emoji: '📱', label: 'Phone' },
+      { id: 'laptop',         emoji: '💻', label: 'Laptop' },
+      { id: 'phone_charger',  emoji: '⚡', label: 'Phone Charger' },
+      { id: 'laptop_charger', emoji: '🔌', label: 'Laptop Charger' },
+      { id: 'power_bank',     emoji: '🔋', label: 'Power Bank' },
+      { id: 'headphones',     emoji: '🎧', label: 'Headphones' },
+      { id: 'travel_adapter', emoji: '🔌', label: 'Plug Adapter' },
+      { id: 'tablet',         emoji: '📖', label: 'Tablet' },
+      { id: 'camera',         emoji: '📷', label: 'Camera' },
+    ],
+  },
+  {
+    id: 'health',
+    title: 'Health & Toiletries',
+    items: [
+      { id: 'medications',  emoji: '💊', label: 'Medications' },
+      { id: 'cosmetics',    emoji: '🧴', label: 'Cosmetics' },
+      { id: 'toothbrush',     emoji: '🪥', label: 'Toothbrush' },
+      { id: 'toothpaste',     emoji: '🦷', label: 'Toothpaste' },
+      { id: 'deodorant',      emoji: '🌿', label: 'Deodorant' },
+      { id: 'perfume',      emoji: '💨', label: 'Perfume' },
+      { id: 'sunscreen',      emoji: '☀️',  label: 'Sunscreen' },
+      { id: 'contacts',       emoji: '👁️',  label: 'Contacts' },
+      { id: 'glasses',        emoji: '👓', label: 'Glasses' },
+      { id: 'hand_sanitizer', emoji: '🧼', label: 'Hand Sanitizer' },
+    ],
+  },
+  {
+    id: 'clothing',
+    title: 'Clothing',
+    items: [
+      { id: 'main_clothes',    emoji: '👕', label: 'Clothes' },
+      { id: 'socks',     emoji: '🧦', label: 'Socks' },
+      { id: 'slippers',        emoji: '🩴', label: 'Slippers' },
+      { id: 'underwear',        emoji: '🩲', label: 'Underwear' },
+      { id: 'swimwear',        emoji: '👙', label: 'Swimwear' },
+      { id: 'sunglasses',        emoji: '🕶️', label: 'Sunglasses' },
+      { id: 'hat',        emoji: '👒', label: 'Hat' },
+    ],
+  },
+];
+
+// Tap cycle: default → checked → skipped → default
+const CYCLE = { default: 'checked', checked: 'skipped', skipped: 'default' };
+const DOT_LABEL = { checked: '✓', skipped: '✕' };
+
+const TOTAL = LIST.reduce((n, s) => n + s.items.length, 0);
+
+function loadState() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(KEY)) || {};
+    // Migrate old boolean values (true → 'checked', false/other → omit)
+    const out = {};
+    for (const [k, v] of Object.entries(raw)) {
+      if (v === 'checked' || v === 'skipped') out[k] = v;
+      else if (v === true) out[k] = 'checked';
+    }
+    return out;
+  } catch (_) { return {}; }
+}
+
+function saveState(s) {
+  try { localStorage.setItem(KEY, JSON.stringify(s)); }
+  catch (_) {}
+}
+
+let state = loadState();
+
+function refreshHeader() {
+  const n = LIST.reduce((acc, s) => acc + s.items.filter(i => state[i.id] === 'checked' || state[i.id] === 'skipped').length, 0);
+  document.getElementById('counter').textContent = `${n} of ${TOTAL} checked`;
+  document.getElementById('progress').style.width = `${(n / TOTAL) * 100}%`;
+}
+
+function refreshBadge(sectionId, items) {
+  const el = document.getElementById('badge-' + sectionId);
+  if (!el) return;
+  const checked = items.filter(i => state[i.id] === 'checked').length;
+  const skipped = items.filter(i => state[i.id] === 'skipped').length;
+  const done = checked + skipped === items.length;
+  el.textContent = `${checked + skipped}/${items.length}`;
+  el.className = 'badge' + (done ? ' done' : '');
+}
+
+function applyState(card, dot, itemId) {
+  const s = state[itemId] || 'default';
+  card.dataset.state = s === 'default' ? '' : s;
+  dot.textContent = DOT_LABEL[s] || '';
+  card.setAttribute('aria-label', `${card.dataset.label} — ${s}`);
+}
+
+function build() {
+  const root = document.getElementById('sections');
+  root.innerHTML = '';
+
+  LIST.forEach(section => {
+    const checked = section.items.filter(i => state[i.id] === 'checked').length;
+    const skipped = section.items.filter(i => state[i.id] === 'skipped').length;
+    const done = checked + skipped === section.items.length;
+
+    const det = document.createElement('details');
+    det.className = 'section';
+    det.open = true;
+
+    det.innerHTML = `
+      <summary>
+        <span class="summary-inner">
+          <svg class="chevron" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M5 2.5l4.5 4.5L5 11.5" stroke="currentColor" stroke-width="1.75"
+              stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          ${section.title}
+        </span>
+        <span class="badge${done ? ' done' : ''}"
+              id="badge-${section.id}">${checked + skipped}/${section.items.length}</span>
+      </summary>
+      <div class="items" id="items-${section.id}"></div>
+    `;
+
+    const itemsEl = det.querySelector('.items');
+
+    section.items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'item';
+      card.tabIndex = 0;
+      card.role = 'button';
+      card.dataset.label = item.label;
+
+      const emoji = document.createElement('span');
+      emoji.className = 'item-emoji';
+      emoji.setAttribute('aria-hidden', 'true');
+      emoji.textContent = item.emoji;
+
+      const txt = document.createElement('span');
+      txt.className = 'item-label';
+      txt.textContent = item.label;
+
+      const dot = document.createElement('span');
+      dot.className = 'item-dot';
+
+      card.append(emoji, txt, dot);
+      applyState(card, dot, item.id);
+
+      function advance() {
+        const cur = state[item.id] || 'default';
+        const next = CYCLE[cur];
+        if (next === 'default') {
+          delete state[item.id];
+        } else {
+          state[item.id] = next;
+        }
+        applyState(card, dot, item.id);
+        saveState(state);
+        refreshHeader();
+        refreshBadge(section.id, section.items);
+      }
+
+      card.addEventListener('click', advance);
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); advance(); }
+      });
+
+      itemsEl.appendChild(card);
+    });
+
+    root.appendChild(det);
+  });
+
+  refreshHeader();
+}
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+  if (confirm('Clear all checked and skipped items and start over?')) {
+    state = {};
+    saveState(state);
+    build();
+  }
+});
+
+build();
+</script>
+</body>
+</html>
