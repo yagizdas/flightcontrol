@@ -62,7 +62,7 @@ body {
 .header-row {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-start;
   margin-bottom: 9px;
 }
 
@@ -297,6 +297,43 @@ details[open] > summary .chevron {
 
 .reset-btn:hover  { opacity: 1; }
 .reset-btn:active { opacity: 0.5; }
+
+/* ── Language toggle ── */
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.4;
+  font-family: inherit;
+  transition: border-color 0.13s;
+}
+
+.lang-btn:hover { border-color: var(--accent); }
+
+.lang-sep {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.lang-flag {
+  opacity: 0.3;
+  transition: opacity 0.13s;
+}
+
+.lang-flag.active { opacity: 1; }
 
 /* ── Completion counter state ── */
 .counter.ready {

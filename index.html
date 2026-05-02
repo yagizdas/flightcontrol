@@ -13,9 +13,16 @@
   <div class="header-row">
     <div class="app-brand">
       <span class="app-title">bavul</span>
-      <span class="app-subtitle">pre-flight checklist</span>
+      <span class="app-subtitle" data-i18n="subtitle">pre-flight checklist</span>
     </div>
-    <span class="counter" id="counter"></span>
+    <div class="header-right">
+      <button class="lang-btn" id="lang-btn" aria-label="Switch language">
+        <span class="lang-flag" data-lang="tr">🇹🇷</span>
+        <span class="lang-sep">|</span>
+        <span class="lang-flag" data-lang="en">🇺🇸</span>
+      </button>
+      <span class="counter" id="counter"></span>
+    </div>
   </div>
   <div class="progress-track">
     <div class="progress-fill" id="progress"></div>
@@ -32,7 +39,7 @@
 
 <div class="overlay hidden" id="overlay" role="dialog" aria-modal="true" aria-labelledby="tutorial-heading">
   <div class="tutorial">
-    <h2 class="tutorial-title" id="tutorial-heading">How it works</h2>
+    <h2 class="tutorial-title" id="tutorial-heading" data-i18n="tutorialTitle">How it works</h2>
 
     <div class="tutorial-rows">
 
@@ -43,8 +50,8 @@
           <span class="demo-lbl">Item</span>
         </div>
         <div class="tutorial-row-text">
-          <span class="row-action">Tap once</span>
-          <span class="row-result">Mark as packed ✓</span>
+          <span class="row-action" data-i18n="action1">Tap once</span>
+          <span class="row-result" data-i18n="result1">Mark as packed ✓</span>
         </div>
       </div>
 
@@ -55,8 +62,8 @@
           <span class="demo-lbl">Item</span>
         </div>
         <div class="tutorial-row-text">
-          <span class="row-action">Tap again</span>
-          <span class="row-result">Not taking ✕</span>
+          <span class="row-action" data-i18n="action2">Tap again</span>
+          <span class="row-result" data-i18n="result2">Not taking ✕</span>
         </div>
       </div>
 
@@ -66,14 +73,14 @@
           <span class="demo-lbl">Item</span>
         </div>
         <div class="tutorial-row-text">
-          <span class="row-action">Tap once more</span>
-          <span class="row-result">Reset to default</span>
+          <span class="row-action" data-i18n="action3">Tap once more</span>
+          <span class="row-result" data-i18n="result3">Reset to default</span>
         </div>
       </div>
 
     </div>
 
-    <button class="tutorial-btn" id="tutorial-dismiss">Got it</button>
+    <button class="tutorial-btn" id="tutorial-dismiss" data-i18n="dismiss">Got it</button>
   </div>
 </div>
 
