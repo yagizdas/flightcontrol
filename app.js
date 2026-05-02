@@ -2,7 +2,7 @@ const KEY          = 'preflight-checklist-v1';
 const TUTORIAL_KEY = 'preflight-tutorial-seen';
 const LANG_KEY     = 'preflight-lang';
 
-let lang = (() => { try { return localStorage.getItem(LANG_KEY) || 'en'; } catch (_) { return 'en'; } })();
+let lang = (() => { try { return localStorage.getItem(LANG_KEY) || (navigator.language.startsWith('tr') ? 'tr' : 'en'); } catch (_) { return 'en'; } })();
 
 const STRINGS = {
   en: {
