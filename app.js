@@ -105,9 +105,13 @@ function refreshHeader() {
     (acc, s) => acc + s.items.filter(i => state[i.id] === 'checked' || state[i.id] === 'skipped').length,
     0
   );
-  document.getElementById('counter').textContent = `${n} of ${TOTAL} checked`;
+  const counter = document.getElementById('counter');
+  const done = n === TOTAL;
+  counter.textContent = done ? 'Ready to fly! ✈️' : `${n} of ${TOTAL} checked`;
+  counter.classList.toggle('ready', done);
   document.getElementById('progress').style.width = `${(n / TOTAL) * 100}%`;
 }
+
 
 function refreshBadge(sectionId, items) {
   const el = document.getElementById('badge-' + sectionId);
