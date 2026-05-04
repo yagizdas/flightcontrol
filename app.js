@@ -30,6 +30,7 @@ const STRINGS = {
     action1: 'Tap once',        result1: 'Mark as packed ✓',
     action2: 'Tap again',       result2: 'Not taking ✕',
     action3: 'Tap once more',   result3: 'Reset to default',
+    action4: 'Tap +',           result4: 'Add your own item',
     dismiss: 'Got it',
   },
   tr: {
@@ -54,6 +55,7 @@ const STRINGS = {
     action1: 'Bir kez dokun',       result1: 'Hazır olarak işaretle ✓',
     action2: 'Tekrar dokun',        result2: 'Almıyorum ✕',
     action3: 'Bir kez daha dokun',  result3: 'Varsayılana sıfırla',
+    action4: '+ düğmesine dokun',   result4: 'Kendi öğeni ekle',
     dismiss: 'Anladım',
   },
 };

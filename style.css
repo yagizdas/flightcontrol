@@ -679,6 +679,34 @@ details[open] > summary .chevron {
   border-style: dashed;
 }
 
+.demo-plus {
+  flex-shrink: 0;
+  position: relative;
+  width: 46px;
+  height: 46px;
+  margin: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 10px 24px rgba(0, 85, 229, 0.24);
+}
+
+.demo-plus::before,
+.demo-plus::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 3px;
+  border-radius: 999px;
+  background: #fff;
+  transform: translate(-50%, -50%);
+}
+
+.demo-plus::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
 .demo-dot {
   position: absolute;
   top: 4px;
