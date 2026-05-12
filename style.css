@@ -628,14 +628,35 @@ details[open] > summary .chevron {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 24px 20px 20px;
-  max-width: 300px;
+  max-width: 360px;
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
   width: 100%;
 }
 
+.tutorial-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  margin-bottom: 22px;
+}
+
+.tutorial-tagline {
+  margin-top: 12px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
 .tutorial-title {
-  font-size: 16px;
-  font-weight: 700;
-  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--text-muted);
   margin-bottom: 20px;
 }
 
@@ -780,3 +801,21 @@ details[open] > summary .chevron {
 
 .tutorial-btn:hover  { opacity: 0.88; }
 .tutorial-btn:active { opacity: 0.7; }
+
+@media (min-width: 768px) {
+  .tutorial {
+    max-width: 520px;
+    padding: 28px 28px 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .overlay {
+    padding: 16px;
+  }
+
+  .tutorial {
+    max-height: calc(100dvh - 32px);
+    padding-bottom: 24px;
+  }
+}
