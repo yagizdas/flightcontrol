@@ -651,9 +651,12 @@ details[open] > summary .chevron {
 }
 
 .tutorial-title {
-  font-size: 16px;
-  font-weight: 700;
-  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--text-muted);
   margin-bottom: 20px;
 }
 
